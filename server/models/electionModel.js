@@ -1,22 +1,34 @@
 const mongoose = require("mongoose");
 
-const electionSchema = new mongoose.Schema({
-    startTime: {
-        type: Date,
-        required: true
-    },
+const electionSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            trim: true,
+            default: "Election"
+        },
 
-    endTime: {
-        type: Date,
-        required: true
-    },
+        startTime: {
+            type: Date,
+            required: true
+        },
 
-    resultsAnnounced: {
-        type: Boolean,
-        default: false
+        endTime: {
+            type: Date,
+            required: true
+        },
+
+        resultsAnnounced: {
+            type: Boolean,
+            default: false
+        }
+    },
+    {
+        timestamps: true
     }
-});
+);
 
-const Election = mongoose.model("Election", electionSchema);
-
-module.exports = Election;
+module.exports = mongoose.model(
+    "Election",
+    electionSchema
+);

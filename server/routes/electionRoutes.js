@@ -4,12 +4,19 @@ const router = express.Router();
 
 const {
     createElection,
+    getElections,
+    getElectionById,
     announceResults,
-    getElection
+    deleteElection
 } = require("../controllers/electionController");
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+
+
+/* =========================================
+   CREATE ELECTION
+========================================= */
 
 router.post(
     "/election",
@@ -18,16 +25,49 @@ router.post(
     createElection
 );
 
+
+/* =========================================
+   GET ALL ELECTIONS
+========================================= */
+
+router.get(
+    "/elections",
+    getElections
+);
+
+
+/* =========================================
+   GET SINGLE ELECTION
+========================================= */
+
+router.get(
+    "/election/:electionId",
+    getElectionById
+);
+
+
+/* =========================================
+   ANNOUNCE RESULTS
+========================================= */
+
 router.post(
-    "/election/announce-results",
+    "/election/:electionId/announce-results",
     authMiddleware,
     adminMiddleware,
     announceResults
 );
 
-router.get(
-    "/election",
-    getElection
+
+/* =========================================
+   DELETE ELECTION
+========================================= */
+
+router.delete(
+    "/election/:electionId",
+    authMiddleware,
+    adminMiddleware,
+    deleteElection
 );
+
 
 module.exports = router;

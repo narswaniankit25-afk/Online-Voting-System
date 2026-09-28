@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const candidateSchema = new mongoose.Schema(
     {
+        election: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Election",
+            required: true,
+            index: true
+        },
+
         name: {
             type: String,
             required: true,
@@ -35,12 +42,7 @@ const candidateSchema = new mongoose.Schema(
     }
 );
 
-
-const Candidate =
-    mongoose.model(
-        "Candidate",
-        candidateSchema
-    );
-
-
-module.exports = Candidate;
+module.exports = mongoose.model(
+    "Candidate",
+    candidateSchema
+);

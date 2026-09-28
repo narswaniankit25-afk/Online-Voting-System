@@ -4,8 +4,11 @@
 
 .admin-page {
     min-height: 100vh;
+
     background: #f5f7fb;
     color: #172033;
+
+    font-family: inherit;
 }
 
 
@@ -16,13 +19,14 @@
 .admin-navbar {
     position: sticky;
     top: 0;
+
     z-index: 100;
 
     background: rgba(255, 255, 255, 0.96);
 
-    border-bottom: 1px solid #e7eaf0;
+    border-bottom: 1px solid #e6e9ef;
 
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
 }
 
 .admin-navbar-inner {
@@ -30,21 +34,25 @@
 
     min-height: 72px;
 
-    margin: auto;
+    margin: 0 auto;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    gap: 20px;
 }
 
 .admin-brand {
-    border: 0;
     padding: 0;
+
+    border: 0;
 
     background: transparent;
 
     display: flex;
     align-items: center;
+
     gap: 11px;
 
     cursor: pointer;
@@ -97,6 +105,7 @@
 .admin-nav-actions {
     display: flex;
     align-items: center;
+
     gap: 8px;
 }
 
@@ -112,6 +121,7 @@
 
     display: flex;
     align-items: center;
+
     gap: 7px;
 
     font-family: inherit;
@@ -119,6 +129,8 @@
     font-weight: 700;
 
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .admin-nav-button:hover {
@@ -127,16 +139,29 @@
 }
 
 .admin-theme-button {
-    width: 36px;
-    height: 36px;
+    width: 37px;
+    height: 37px;
 
     border: 1px solid #e1e5eb;
     border-radius: 50%;
 
     background: white;
+
     color: #687386;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+
     cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.admin-theme-button:hover {
+    background: #f5f6fa;
 }
 
 .admin-logout {
@@ -146,6 +171,7 @@
     border-radius: 8px;
 
     background: white;
+
     color: #647084;
 
     font-family: inherit;
@@ -153,6 +179,8 @@
     font-weight: 700;
 
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .admin-logout:hover {
@@ -171,7 +199,7 @@
 .admin-main {
     width: min(1380px, 92%);
 
-    margin: auto;
+    margin: 0 auto;
 
     padding: 25px 0 45px;
 }
@@ -186,7 +214,7 @@
 
     padding: 30px 40px;
 
-    border-radius: 19px;
+    border-radius: 20px;
 
     display: flex;
     align-items: center;
@@ -214,7 +242,7 @@
     z-index: 2;
 }
 
-.admin-hero span {
+.admin-hero > div:first-child > span {
     color: #6469a8;
 
     font-size: 9px;
@@ -270,21 +298,28 @@
 
     display: flex;
     align-items: center;
+
     gap: 9px;
 
     font-size: 12px;
     font-weight: 600;
+
+    animation: adminMessageIn 0.25s ease;
 }
 
 .admin-notification.success {
     background: #ecfdf3;
+
     border: 1px solid #b7ebcc;
+
     color: #087443;
 }
 
 .admin-notification.error {
     background: #fff1f2;
+
     border: 1px solid #fecdd3;
+
     color: #be123c;
 }
 
@@ -298,7 +333,10 @@
     align-items: center;
     justify-content: center;
 
+    flex-shrink: 0;
+
     color: white;
+
     font-size: 11px;
 }
 
@@ -315,14 +353,136 @@
 .admin-notification button {
     margin-left: auto;
 
+    padding: 0;
+
     border: 0;
+
     background: transparent;
 
     color: currentColor;
 
     font-size: 20px;
 
+    line-height: 1;
+
     cursor: pointer;
+}
+
+@keyframes adminMessageIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.admin-stats-grid {
+    margin-top: 22px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 13px;
+}
+
+.admin-stat-card {
+    min-height: 78px;
+
+    padding: 15px;
+
+    border: 1px solid #e4e7ed;
+
+    border-radius: 13px;
+
+    background: white;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    box-shadow:
+        0 6px 20px rgba(15, 23, 42, 0.03);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.admin-stat-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+.admin-stat-icon {
+    width: 43px;
+    height: 43px;
+
+    border-radius: 11px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-stat-icon.purple {
+    background: #eeeeff;
+    color: #5146e5;
+}
+
+.admin-stat-icon.green {
+    background: #ecfdf3;
+    color: #059669;
+}
+
+.admin-stat-icon.blue {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.admin-stat-icon.orange {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.admin-stat-card > div:last-child {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-stat-card span {
+    color: #8992a2;
+
+    font-size: 10px;
+}
+
+.admin-stat-card strong {
+    margin-top: 5px;
+
+    color: #273142;
+
+    font-size: 15px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 
@@ -331,20 +491,27 @@
 ========================================= */
 
 .admin-section {
-    margin-top: 28px;
+    margin-top: 29px;
 }
 
 .admin-section-header {
     margin-bottom: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
 }
 
-.admin-section-header > div {
+.admin-section-header > div:first-child {
     display: flex;
     align-items: flex-start;
+
     gap: 12px;
 }
 
-.admin-section-header > div > span {
+.admin-section-header > div:first-child > span {
     width: 31px;
     height: 31px;
 
@@ -377,23 +544,6 @@
     font-size: 11px;
 }
 
-.admin-count {
-    float: right;
-
-    margin-top: -31px;
-
-    padding: 7px 11px;
-
-    border-radius: 999px;
-
-    background: #eeeeff;
-
-    color: #5146e5;
-
-    font-size: 10px;
-    font-weight: 700;
-}
-
 
 /* =========================================
    ELECTION
@@ -404,6 +554,7 @@
     padding: 22px;
 
     border: 1px solid #e3e7ee;
+
     border-radius: 14px;
 
     background: white;
@@ -416,6 +567,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    gap: 20px;
 }
 
 .admin-small-label {
@@ -442,7 +595,10 @@
 
     display: inline-flex;
     align-items: center;
+
     gap: 6px;
+
+    white-space: nowrap;
 
     font-size: 10px;
     font-weight: 800;
@@ -462,6 +618,8 @@
 
 .admin-status-live i {
     background: #10b981;
+
+    animation: adminPulse 1.5s infinite;
 }
 
 .admin-status-upcoming {
@@ -480,6 +638,20 @@
 
 .admin-status-ended i {
     background: #64748b;
+}
+
+@keyframes adminPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16,185,129,0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(16,185,129,0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16,185,129,0);
+    }
 }
 
 .admin-election-details {
@@ -522,6 +694,7 @@
     padding: 10px 14px;
 
     border: 0;
+
     border-radius: 8px;
 
     background: #5146e5;
@@ -532,10 +705,20 @@
     font-weight: 700;
 
     cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.admin-announce-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 17px rgba(81,70,229,0.2);
 }
 
 .admin-announce-button:disabled {
     background: #d9dce4;
+
     color: #858c99;
 
     cursor: not-allowed;
@@ -545,6 +728,52 @@
 /* =========================================
    FORM
 ========================================= */
+
+.admin-form-intro {
+    margin-bottom: 20px;
+
+    padding-bottom: 17px;
+
+    border-bottom: 1px solid #edf0f4;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.admin-form-intro-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eeeeff;
+    color: #5146e5;
+}
+
+.admin-form-intro div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-form-intro strong {
+    color: #303949;
+
+    font-size: 12px;
+}
+
+.admin-form-intro span {
+    margin-top: 3px;
+
+    color: #8992a2;
+
+    font-size: 10px;
+}
 
 .admin-form-grid {
     display: grid;
@@ -577,6 +806,7 @@
     padding: 11px 12px;
 
     border: 1px solid #dfe3e9;
+
     border-radius: 8px;
 
     outline: none;
@@ -588,6 +818,10 @@
     font-size: 12px;
 
     transition: 0.2s ease;
+}
+
+.admin-field input:hover {
+    border-color: #cfd4dd;
 }
 
 .admin-field input:focus {
@@ -605,6 +839,7 @@
     padding: 11px 17px;
 
     border: 0;
+
     border-radius: 8px;
 
     background: linear-gradient(
@@ -620,17 +855,22 @@
     font-weight: 700;
 
     cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .admin-primary-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+
     box-shadow:
         0 7px 17px rgba(81,70,229,0.2);
-
-    transform: translateY(-1px);
 }
 
 .admin-primary-button:disabled {
     opacity: 0.55;
+
     cursor: not-allowed;
 }
 
@@ -640,9 +880,11 @@
     padding: 10px 15px;
 
     border: 1px solid #dfe3e9;
+
     border-radius: 8px;
 
     background: white;
+
     color: #606b7c;
 
     font-family: inherit;
@@ -652,8 +894,13 @@
     cursor: pointer;
 }
 
+.admin-secondary-button:hover {
+    background: #f7f8fa;
+}
+
 .admin-form-actions {
     display: flex;
+
     gap: 9px;
 }
 
@@ -677,6 +924,7 @@
     padding: 15px;
 
     border: 1px dashed #d7dce5;
+
     border-radius: 11px;
 
     background: #fafbfc;
@@ -689,6 +937,7 @@
 .admin-upload-heading > div {
     display: flex;
     align-items: center;
+
     gap: 8px;
 }
 
@@ -712,11 +961,12 @@
 }
 
 .admin-file-label {
-    min-height: 72px;
+    min-height: 80px;
 
     padding: 10px;
 
     border: 1px solid #e2e6ec;
+
     border-radius: 9px;
 
     background: white;
@@ -793,6 +1043,8 @@
     object-fit: cover;
 
     border-radius: 7px;
+
+    background: #f3f4f6;
 }
 
 .existing-image > div {
@@ -815,20 +1067,28 @@
     padding: 5px 8px;
 
     border: 0;
+
     border-radius: 6px;
 
     background: #fff1f2;
+
     color: #be123c;
 
     font-family: inherit;
+
     font-size: 9px;
     font-weight: 700;
 
     cursor: pointer;
 }
 
+.existing-image button:hover {
+    background: #ffe4e6;
+}
+
 .symbol-existing img {
     object-fit: contain;
+
     background: #f5f6f8;
 }
 
@@ -848,19 +1108,106 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    gap: 8px;
 }
 
 .remove-image-message button {
+    padding: 0;
+
     border: 0;
+
     background: transparent;
 
     color: #7c5a08;
 
     font-family: inherit;
+
     font-size: 9px;
     font-weight: 700;
 
     cursor: pointer;
+}
+
+
+/* =========================================
+   CANDIDATE LIST HEADER
+========================================= */
+
+.candidate-list-header {
+    align-items: flex-end;
+}
+
+.admin-list-controls {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+.admin-search {
+    width: 235px;
+
+    height: 38px;
+
+    box-sizing: border-box;
+
+    padding: 0 11px;
+
+    border: 1px solid #dfe3e9;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #8b94a4;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    transition: 0.2s ease;
+}
+
+.admin-search:focus-within {
+    border-color: #aaa5f5;
+
+    box-shadow:
+        0 0 0 3px rgba(81,70,229,0.07);
+}
+
+.admin-search input {
+    width: 100%;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: #273142;
+
+    font-family: inherit;
+    font-size: 11px;
+}
+
+.admin-search input::placeholder {
+    color: #9aa2b0;
+}
+
+.admin-count {
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: #eeeeff;
+
+    color: #5146e5;
+
+    white-space: nowrap;
+
+    font-size: 10px;
+    font-weight: 700;
 }
 
 
@@ -879,6 +1226,7 @@
     padding: 11px 13px;
 
     border: 1px solid #e3e7ee;
+
     border-radius: 12px;
 
     background: white;
@@ -888,14 +1236,19 @@
 
     gap: 13px;
 
-    transition: 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .admin-candidate-item:hover {
+    transform: translateY(-1px);
+
     border-color: #d2d6e8;
 
     box-shadow:
-        0 7px 20px rgba(15,23,42,0.04);
+        0 7px 20px rgba(15,23,42,0.05);
 }
 
 .admin-candidate-number {
@@ -936,6 +1289,14 @@
     object-fit: cover;
 }
 
+.admin-candidate-photo span {
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+}
+
 .admin-candidate-info {
     flex: 1;
 
@@ -948,6 +1309,12 @@
     color: #273142;
 
     font-size: 13px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
 }
 
 .admin-candidate-info p {
@@ -956,11 +1323,17 @@
     color: #8a93a3;
 
     font-size: 10px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
 }
 
 .admin-symbol-preview {
-    width: 62px;
-    height: 48px;
+    width: 68px;
+    height: 50px;
 
     border-radius: 8px;
 
@@ -974,7 +1347,7 @@
 
     color: #495466;
 
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
 
     text-align: center;
@@ -991,10 +1364,15 @@
     box-sizing: border-box;
 }
 
+.admin-symbol-preview span {
+    padding: 4px;
+}
+
 .admin-edit-button {
     padding: 8px 11px;
 
     border: 1px solid #e1e4eb;
+
     border-radius: 8px;
 
     background: white;
@@ -1003,13 +1381,17 @@
 
     display: flex;
     align-items: center;
+
     gap: 5px;
 
     font-family: inherit;
+
     font-size: 10px;
     font-weight: 700;
 
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .admin-edit-button:hover {
@@ -1026,9 +1408,10 @@
 ========================================= */
 
 .admin-empty {
-    padding: 45px 20px;
+    padding: 48px 20px;
 
     border: 1px dashed #d9dee7;
+
     border-radius: 13px;
 
     background: white;
@@ -1037,8 +1420,8 @@
 }
 
 .admin-empty-icon {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
 
     margin: 0 auto 12px;
 
@@ -1052,7 +1435,7 @@
     align-items: center;
     justify-content: center;
 
-    font-size: 25px;
+    font-size: 24px;
 }
 
 .admin-empty h3 {
@@ -1091,6 +1474,7 @@
 .admin-footer > div {
     display: flex;
     align-items: center;
+
     gap: 8px;
 }
 
@@ -1118,11 +1502,13 @@
 
 body.dark-mode .admin-page {
     background: #080d19;
+
     color: #e5e7eb;
 }
 
 body.dark-mode .admin-navbar {
     background: rgba(15,23,42,0.96);
+
     border-color: #1f2937;
 }
 
@@ -1140,13 +1526,16 @@ body.dark-mode .admin-nav-button {
 
 body.dark-mode .admin-nav-button:hover {
     background: #1d1e3b;
+
     color: #a7a3ff;
 }
 
 body.dark-mode .admin-theme-button,
 body.dark-mode .admin-logout {
     background: #111827;
+
     border-color: #2b3545;
+
     color: #cbd5e1;
 }
 
@@ -1174,8 +1563,38 @@ body.dark-mode .admin-hero p {
     color: #929db2;
 }
 
-body.dark-mode .admin-hero span {
+body.dark-mode .admin-hero > div:first-child > span {
     color: #999ce0;
+}
+
+body.dark-mode .admin-stat-card {
+    background: #111827;
+
+    border-color: #202b3b;
+}
+
+body.dark-mode .admin-stat-card span {
+    color: #8490a4;
+}
+
+body.dark-mode .admin-stat-card strong {
+    color: #f3f4f6;
+}
+
+body.dark-mode .admin-stat-icon.purple {
+    background: #202044;
+}
+
+body.dark-mode .admin-stat-icon.green {
+    background: #103326;
+}
+
+body.dark-mode .admin-stat-icon.blue {
+    background: #172b47;
+}
+
+body.dark-mode .admin-stat-icon.orange {
+    background: #392617;
 }
 
 body.dark-mode .admin-section-header h2 {
@@ -1186,16 +1605,22 @@ body.dark-mode .admin-section-header p {
     color: #8490a4;
 }
 
+body.dark-mode .admin-section-header > div:first-child > span {
+    background: #202044;
+
+    color: #aaa6ff;
+}
+
 body.dark-mode .admin-election-card,
 body.dark-mode .admin-form-card,
 body.dark-mode .admin-candidate-item,
 body.dark-mode .admin-empty {
     background: #111827;
+
     border-color: #202b3b;
 }
 
-body.dark-mode .admin-election-top h3,
-body.dark-mode .admin-candidate-info h3 {
+body.dark-mode .admin-election-top h3 {
     color: #f3f4f6;
 }
 
@@ -1207,13 +1632,31 @@ body.dark-mode .admin-election-details strong {
     color: #e5e7eb;
 }
 
+body.dark-mode .admin-form-intro {
+    border-color: #222d3d;
+}
+
+body.dark-mode .admin-form-intro strong {
+    color: #e5e7eb;
+}
+
+body.dark-mode .admin-form-intro span {
+    color: #8490a4;
+}
+
+body.dark-mode .admin-form-intro-icon {
+    background: #202044;
+}
+
 body.dark-mode .admin-field label {
     color: #b1bac8;
 }
 
 body.dark-mode .admin-field input {
     background: #0f172a;
+
     border-color: #2b3545;
+
     color: #e5e7eb;
 }
 
@@ -1223,6 +1666,7 @@ body.dark-mode .admin-field input:focus {
 
 body.dark-mode .admin-upload-box {
     background: #0f172a;
+
     border-color: #344054;
 }
 
@@ -1232,6 +1676,7 @@ body.dark-mode .admin-upload-heading strong {
 
 body.dark-mode .admin-file-label {
     background: #111827;
+
     border-color: #2b3545;
 }
 
@@ -1241,6 +1686,7 @@ body.dark-mode .admin-file-label:hover {
 
 body.dark-mode .existing-image {
     background: #111827;
+
     border-color: #2b3545;
 }
 
@@ -1254,14 +1700,41 @@ body.dark-mode .admin-candidate-photo {
 
 body.dark-mode .admin-symbol-preview {
     background: #1f2937;
+
     color: #d1d5db;
 }
 
 body.dark-mode .admin-edit-button,
 body.dark-mode .admin-secondary-button {
     background: #111827;
+
     border-color: #374151;
+
     color: #cbd5e1;
+}
+
+body.dark-mode .admin-edit-button:hover {
+    background: #202044;
+
+    border-color: #45418a;
+
+    color: #aaa6ff;
+}
+
+body.dark-mode .admin-search {
+    background: #111827;
+
+    border-color: #2b3545;
+}
+
+body.dark-mode .admin-search input {
+    color: #e5e7eb;
+}
+
+body.dark-mode .admin-count {
+    background: #202044;
+
+    color: #aaa6ff;
 }
 
 body.dark-mode .admin-empty-icon {
@@ -1285,7 +1758,12 @@ body.dark-mode .admin-footer {
    RESPONSIVE
 ========================================= */
 
-@media (max-width: 950px) {
+@media (max-width: 1050px) {
+
+    .admin-stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
 
     .admin-form-grid {
         grid-template-columns:
@@ -1293,18 +1771,12 @@ body.dark-mode .admin-footer {
     }
 
     .admin-upload-grid {
-        grid-template-columns:
-            1fr;
-    }
-
-    .admin-election-details {
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
     }
 }
 
 
-@media (max-width: 700px) {
+@media (max-width: 760px) {
 
     .admin-navbar-inner {
         padding: 12px 0;
@@ -1322,21 +1794,48 @@ body.dark-mode .admin-footer {
 
     .admin-main {
         width: 94%;
+
+        padding-top: 17px;
     }
 
     .admin-hero {
-        padding: 25px;
-
         min-height: 0;
+
+        padding: 27px;
     }
 
     .admin-hero-icon {
         display: none;
     }
 
-    .admin-form-grid {
-        grid-template-columns:
-            1fr;
+    .admin-section-header {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .candidate-list-header {
+        align-items: stretch;
+    }
+
+    .admin-list-controls {
+        width: 100%;
+    }
+
+    .admin-search {
+        flex: 1;
+
+        width: auto;
+    }
+
+    .admin-election-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .admin-election-details {
+        grid-template-columns: 1fr;
     }
 
     .admin-candidate-item {
@@ -1344,58 +1843,71 @@ body.dark-mode .admin-footer {
     }
 
     .admin-candidate-info {
-        min-width: 150px;
+        min-width: calc(100% - 125px);
     }
 
     .admin-symbol-preview {
         margin-left: 43px;
     }
-
-    .admin-edit-button {
-        margin-left: auto;
-    }
-
-    .admin-footer {
-        flex-direction: column;
-        align-items: flex-start;
-
-        gap: 7px;
-    }
 }
 
 
-@media (max-width: 480px) {
+@media (max-width: 560px) {
 
-    .admin-nav-button {
-        padding: 7px 8px;
-    }
-
-    .admin-logout {
-        padding: 8px 10px;
-    }
-
-    .admin-section-header > div > span {
+    .admin-brand span {
         display: none;
     }
 
-    .admin-count {
-        float: none;
+    .admin-nav-button {
+        padding: 8px;
+    }
 
-        display: inline-block;
+    .admin-nav-button svg {
+        display: none;
+    }
 
-        margin: 9px 0 0;
+    .admin-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-hero {
+        padding: 23px;
+    }
+
+    .admin-hero h1 {
+        font-size: 27px;
+    }
+
+    .admin-hero p {
+        line-height: 1.5;
     }
 
     .admin-election-card,
     .admin-form-card {
-        padding: 16px;
+        padding: 17px;
     }
 
-    .admin-election-top {
-        align-items: flex-start;
+    .admin-list-controls {
+        align-items: stretch;
 
         flex-direction: column;
+    }
 
+    .admin-search {
+        flex: none;
+
+        width: 100%;
+    }
+
+    .admin-count {
+        align-self: flex-start;
+    }
+
+    .admin-upload-grid {
         gap: 10px;
     }
 
@@ -1403,12 +1915,45 @@ body.dark-mode .admin-footer {
         flex-direction: column;
     }
 
-    .admin-primary-button,
-    .admin-secondary-button {
+    .admin-form-actions button {
         width: 100%;
     }
 
+    .admin-candidate-item {
+        padding: 13px;
+    }
+
+    .admin-candidate-number {
+        width: 20px;
+    }
+
+    .admin-candidate-photo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .admin-candidate-info {
+        min-width: 0;
+
+        flex: 1;
+    }
+
     .admin-symbol-preview {
-        width: 55px;
+        width: 60px;
+        height: 45px;
+
+        margin-left: 33px;
+    }
+
+    .admin-edit-button {
+        margin-left: auto;
+    }
+
+    .admin-footer {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 8px;
     }
 }

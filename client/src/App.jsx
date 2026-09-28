@@ -5,6 +5,7 @@ import {
     Navigate
 } from "react-router-dom";
 
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VoterDashboard from "./pages/VoterDashboard";
@@ -19,20 +20,41 @@ function App() {
 
             <Routes>
 
-                {/* Login */}
+                {/* =========================================
+                    HOME PAGE
+                ========================================= */}
+
+                <Route
+                    path="/"
+                    element={<Home />}
+                />
+
+
+                {/* =========================================
+                    LOGIN
+                ========================================= */}
+
                 <Route
                     path="/login"
                     element={<Login />}
                 />
 
-                {/* Register */}
+
+                {/* =========================================
+                    REGISTER
+                ========================================= */}
+
                 <Route
                     path="/register"
                     element={<Register />}
                 />
 
-                {/* Voter Dashboard
-                    Both user and admin can access it */}
+
+                {/* =========================================
+                    VOTER DASHBOARD
+                    Both users and admins can access
+                ========================================= */}
+
                 <Route
                     path="/dashboard"
                     element={
@@ -42,8 +64,12 @@ function App() {
                     }
                 />
 
-                {/* Admin Dashboard
-                    Only admin can access it */}
+
+                {/* =========================================
+                    ADMIN DASHBOARD
+                    Admin only
+                ========================================= */}
+
                 <Route
                     path="/admin"
                     element={
@@ -53,8 +79,12 @@ function App() {
                     }
                 />
 
-                {/* Results
-                    Any logged-in user can access it */}
+
+                {/* =========================================
+                    RESULTS
+                    Logged-in users only
+                ========================================= */}
+
                 <Route
                     path="/results"
                     element={
@@ -64,10 +94,20 @@ function App() {
                     }
                 />
 
-                {/* Unknown URL → Login */}
+
+                {/* =========================================
+                    UNKNOWN URL
+                    Redirect to Home
+                ========================================= */}
+
                 <Route
                     path="*"
-                    element={<Navigate to="/login" replace />}
+                    element={
+                        <Navigate
+                            to="/"
+                            replace
+                        />
+                    }
                 />
 
             </Routes>

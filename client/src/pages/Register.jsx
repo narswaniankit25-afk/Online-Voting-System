@@ -11,6 +11,10 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+    const [elections, setElections] = useState([]);
+    const [selectedElectionIds, setSelectedElectionIds] = useState([]);
+    const [electionsLoading, setElectionsLoading] = useState(true);
+
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
 
@@ -20,8 +24,15 @@ function Register() {
 
     const navigate = useNavigate();
 
+    /* =========================================
+       DARK MODE
+    ========================================== */
+
     useEffect(() => {
-        document.body.classList.toggle("dark-mode", darkMode);
+        document.body.classList.toggle(
+            "dark-mode",
+            darkMode
+        );
 
         localStorage.setItem(
             "darkMode",
@@ -29,32 +40,177 @@ function Register() {
         );
     }, [darkMode]);
 
+
+    /* =========================================
+       FETCH AVAILABLE ELECTIONS
+    ========================================== */
+
+    useEffect(() => {
+        const fetchElections = async () => {
+            try {
+                setElectionsLoading(true);
+
+                const response =
+                    await axios.get(
+                        "http://localhost:5000/registration-elections"
+                    );
+
+                const availableElections =
+                    response.data?.elections || [];
+
+                setElections(
+                    availableElections
+                );
+
+                /*
+                If there is exactly one election,
+                automatically select it.
+
+                This gives the user a simple
+                registration experience when only
+                one election exists.
+                */
+
+                if (
+                    availableElections.length === 1
+                ) {
+                    setSelectedElectionIds([
+                        availableElections[0]._id
+                    ]);
+                }
+
+            } catch (error) {
+                console.log(error);
+
+                setMessage(
+                    error.response?.data?.message ||
+                    "Unable to load elections"
+                );
+
+                setMessageType("error");
+
+            } finally {
+                setElectionsLoading(false);
+            }
+        };
+
+        fetchElections();
+    }, []);
+
+
+    /* =========================================
+       TOGGLE ELECTION SELECTION
+    ========================================== */
+
+    const toggleElection = (electionId) => {
+        setSelectedElectionIds((current) => {
+            if (
+                current.includes(electionId)
+            ) {
+                return current.filter(
+                    (id) =>
+                        id !== electionId
+                );
+            }
+
+            return [
+                ...current,
+                electionId
+            ];
+        });
+    };
+
+
+    /* =========================================
+       FORMAT DATE
+    ========================================== */
+
+    const formatDate = (date) => {
+        if (!date) {
+            return "";
+        }
+
+        return new Date(date).toLocaleString(
+            "en-IN",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
+    };
+
+
+    /* =========================================
+       REGISTER
+    ========================================== */
+
     const handleRegister = async (e) => {
         e.preventDefault();
 
         setMessage("");
         setMessageType("");
 
-        if (password !== confirmPassword) {
-            setMessage("Passwords do not match");
+        /* =========================================
+           PASSWORD VALIDATION
+        ========================================== */
+
+        if (
+            password !== confirmPassword
+        ) {
+            setMessage(
+                "Passwords do not match"
+            );
+
             setMessageType("error");
+
             return;
         }
 
-        try {
-            const response = await axios.post(
-                "http://localhost:5000/register",
-                {
-                    name: name,
-                    email: email,
-                    password: password
-                }
+
+        /* =========================================
+           ELECTION VALIDATION
+        ========================================== */
+
+        if (
+            selectedElectionIds.length === 0
+        ) {
+            setMessage(
+                "Please select at least one election"
             );
+
+            setMessageType("error");
+
+            return;
+        }
+
+
+        try {
+            const response =
+                await axios.post(
+                    "http://localhost:5000/register",
+                    {
+                        name: name,
+                        email: email,
+                        password: password,
+                        electionIds:
+                            selectedElectionIds
+                    }
+                );
+
+
+            /* =========================================
+               SAVE TOKEN
+            ========================================== */
 
             localStorage.setItem(
                 "token",
                 response.data.token
             );
+
+
+            /* =========================================
+               SUCCESS MESSAGE
+            ========================================== */
 
             setMessage(
                 response.data.message ||
@@ -62,6 +218,11 @@ function Register() {
             );
 
             setMessageType("success");
+
+
+            /* =========================================
+               REDIRECT
+            ========================================== */
 
             setTimeout(() => {
                 navigate("/dashboard");
@@ -79,6 +240,7 @@ function Register() {
         }
     };
 
+
     return (
         <div className="login-page">
 
@@ -89,7 +251,9 @@ function Register() {
             <button
                 type="button"
                 className="theme-toggle"
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={() =>
+                    setDarkMode(!darkMode)
+                }
                 aria-label={
                     darkMode
                         ? "Switch to light mode"
@@ -110,7 +274,11 @@ function Register() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     >
-                        <circle cx="12" cy="12" r="4" />
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="4"
+                        />
 
                         <path d="M12 2v2" />
                         <path d="M12 20v2" />
@@ -426,7 +594,9 @@ function Register() {
                                         placeholder="Enter your full name"
                                         value={name}
                                         onChange={(e) =>
-                                            setName(e.target.value)
+                                            setName(
+                                                e.target.value
+                                            )
                                         }
                                         required
                                     />
@@ -473,12 +643,246 @@ function Register() {
                                         placeholder="Enter your email"
                                         value={email}
                                         onChange={(e) =>
-                                            setEmail(e.target.value)
+                                            setEmail(
+                                                e.target.value
+                                            )
                                         }
                                         required
                                     />
 
                                 </div>
+
+                            </div>
+
+
+                            {/* =========================================
+                                ELECTION SELECTION
+                            ========================================== */}
+
+                            <div className="input-group">
+
+                                <label>
+                                    Select Election
+                                </label>
+
+                                {electionsLoading ? (
+
+                                    <div
+                                        style={{
+                                            padding: "14px",
+                                            borderRadius: "10px",
+                                            border: "1px solid #ddd",
+                                            fontSize: "14px"
+                                        }}
+                                    >
+                                        Loading available elections...
+                                    </div>
+
+                                ) : elections.length === 0 ? (
+
+                                    <div
+                                        style={{
+                                            padding: "14px",
+                                            borderRadius: "10px",
+                                            border: "1px solid #ddd",
+                                            fontSize: "14px"
+                                        }}
+                                    >
+                                        No active elections are currently
+                                        available for registration.
+                                    </div>
+
+                                ) : elections.length === 1 ? (
+
+                                    /* =========================================
+                                       SINGLE ELECTION
+                                    ========================================== */
+
+                                    <div
+                                        style={{
+                                            padding: "14px 16px",
+                                            borderRadius: "10px",
+                                            border: "1px solid #ddd",
+                                            background:
+                                                "rgba(0, 0, 0, 0.02)"
+                                        }}
+                                    >
+
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "10px"
+                                            }}
+                                        >
+
+                                            <input
+                                                type="checkbox"
+                                                checked={
+                                                    selectedElectionIds.includes(
+                                                        elections[0]._id
+                                                    )
+                                                }
+                                                onChange={() =>
+                                                    toggleElection(
+                                                        elections[0]._id
+                                                    )
+                                                }
+                                            />
+
+                                            <strong>
+                                                {elections[0].title}
+                                            </strong>
+
+                                        </div>
+
+                                        <div
+                                            style={{
+                                                marginTop: "8px",
+                                                marginLeft: "28px",
+                                                fontSize: "12px",
+                                                opacity: 0.75
+                                            }}
+                                        >
+                                            {formatDate(
+                                                elections[0].startTime
+                                            )}
+
+                                            {" — "}
+
+                                            {formatDate(
+                                                elections[0].endTime
+                                            )}
+                                        </div>
+
+                                    </div>
+
+                                ) : (
+
+                                    /* =========================================
+                                       MULTIPLE ELECTIONS
+                                    ========================================== */
+
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: "10px",
+                                            maxHeight: "230px",
+                                            overflowY: "auto",
+                                            paddingRight: "4px"
+                                        }}
+                                    >
+
+                                        {elections.map(
+                                            (election) => {
+
+                                                const isSelected =
+                                                    selectedElectionIds.includes(
+                                                        election._id
+                                                    );
+
+                                                return (
+                                                    <label
+                                                        key={
+                                                            election._id
+                                                        }
+                                                        style={{
+                                                            display: "block",
+                                                            padding:
+                                                                "12px 14px",
+                                                            borderRadius:
+                                                                "10px",
+                                                            border:
+                                                                isSelected
+                                                                    ? "2px solid #2563eb"
+                                                                    : "1px solid #ddd",
+                                                            cursor:
+                                                                "pointer",
+                                                            background:
+                                                                isSelected
+                                                                    ? "rgba(37, 99, 235, 0.08)"
+                                                                    : "transparent"
+                                                        }}
+                                                    >
+
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems:
+                                                                    "center",
+                                                                gap: "10px"
+                                                            }}
+                                                        >
+
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={
+                                                                    isSelected
+                                                                }
+                                                                onChange={() =>
+                                                                    toggleElection(
+                                                                        election._id
+                                                                    )
+                                                                }
+                                                            />
+
+                                                            <strong>
+                                                                {
+                                                                    election.title
+                                                                }
+                                                            </strong>
+
+                                                        </div>
+
+                                                        <div
+                                                            style={{
+                                                                marginTop:
+                                                                    "6px",
+                                                                marginLeft:
+                                                                    "28px",
+                                                                fontSize:
+                                                                    "12px",
+                                                                opacity:
+                                                                    0.75
+                                                            }}
+                                                        >
+                                                            {
+                                                                formatDate(
+                                                                    election.startTime
+                                                                )
+                                                            }
+
+                                                            {" — "}
+
+                                                            {
+                                                                formatDate(
+                                                                    election.endTime
+                                                                )
+                                                            }
+                                                        </div>
+
+                                                    </label>
+                                                );
+                                            }
+                                        )}
+
+                                    </div>
+                                )}
+
+                                {!electionsLoading &&
+                                    elections.length > 1 && (
+                                        <p
+                                            style={{
+                                                marginTop: "7px",
+                                                fontSize: "12px",
+                                                opacity: 0.7
+                                            }}
+                                        >
+                                            Select one or more elections
+                                            you want to participate in.
+                                        </p>
+                                    )}
 
                             </div>
 
@@ -524,7 +928,9 @@ function Register() {
                                         placeholder="Create a password"
                                         value={password}
                                         onChange={(e) =>
-                                            setPassword(e.target.value)
+                                            setPassword(
+                                                e.target.value
+                                            )
                                         }
                                         required
                                     />
@@ -638,7 +1044,9 @@ function Register() {
                                                 : "password"
                                         }
                                         placeholder="Confirm your password"
-                                        value={confirmPassword}
+                                        value={
+                                            confirmPassword
+                                        }
                                         onChange={(e) =>
                                             setConfirmPassword(
                                                 e.target.value
@@ -718,6 +1126,10 @@ function Register() {
                             <button
                                 type="submit"
                                 className="login-button"
+                                disabled={
+                                    electionsLoading ||
+                                    elections.length === 0
+                                }
                             >
 
                                 <span>
@@ -753,7 +1165,9 @@ function Register() {
                         <button
                             type="button"
                             className="register-button"
-                            onClick={() => navigate("/login")}
+                            onClick={() =>
+                                navigate("/login")
+                            }
                         >
 
                             Already have an account?

@@ -1,29 +1,65 @@
 const Candidate = require("../models/candidateModel");
+const Election = require("../models/electionModel");
+
 const fs = require("fs");
 const path = require("path");
 
 
-const deleteFile = (fileUrl) => {
+/* =========================================
+   DELETE UPLOADED FILE
+========================================= */
 
-    if (!fileUrl) {
+const deleteUploadedFile = (filePath) => {
+
+    if (!filePath) {
         return;
     }
 
-    const filePath = path.join(
-        __dirname,
-        "..",
-        fileUrl.replace(/^\/+/, "")
-    );
+    const fileName =
+        path.basename(filePath);
 
-    fs.unlink(filePath, (error) => {
+    const absolutePath =
+        path.join(
+            __dirname,
+            "..",
+            "uploads",
+            "candidates",
+            fileName
+        );
 
-        if (error && error.code !== "ENOENT") {
+    if (fs.existsSync(absolutePath)) {
+
+        try {
+
+            fs.unlinkSync(absolutePath);
+
+        } catch (error) {
+
             console.log(
-                "Unable to delete old file:",
-                error.message
+                "Unable to delete file:",
+                absolutePath
             );
+
         }
-    });
+
+    }
+
+};
+
+
+/* =========================================
+   CHECK ELECTION
+========================================= */
+
+const findElection = async (electionId) => {
+
+    if (!electionId) {
+        return null;
+    }
+
+    return await Election.findById(
+        electionId
+    );
 };
 
 
@@ -36,10 +72,25 @@ const addCandidate = async (req, res) => {
     try {
 
         const {
+            electionId,
             name,
             party,
             symbol
         } = req.body;
+
+
+        /* ================================
+           VALIDATION
+        ================================= */
+
+        if (!electionId) {
+
+            return res.status(400).json({
+                message:
+                    "Election ID is required"
+            });
+
+        }
 
 
         if (!name || !party || !symbol) {
@@ -48,40 +99,106 @@ const addCandidate = async (req, res) => {
                 message:
                     "Candidate name, party and symbol are required"
             });
+
         }
 
 
-        let candidatePhoto = null;
+        /* ================================
+           CHECK ELECTION
+        ================================= */
+
+        const election =
+            await findElection(
+                electionId
+            );
+
+
+        if (!election) {
+
+            return res.status(404).json({
+                message:
+                    "Election not found"
+            });
+
+        }
+
+
+        /* ================================
+           PREVENT ADDING CANDIDATES
+           AFTER ELECTION ENDS
+        ================================= */
+
+        const now =
+            new Date();
+
+
+        if (now >= election.endTime) {
+
+            return res.status(403).json({
+                message:
+                    "Candidates cannot be added after the election ends"
+            });
+
+        }
+
+
+        /* ================================
+           GET UPLOADED FILES
+        ================================= */
+
+        let photo = null;
+
         let symbolImage = null;
 
 
-        if (req.files?.photo?.[0]) {
+        if (
+            req.files &&
+            req.files.photo &&
+            req.files.photo[0]
+        ) {
 
-            candidatePhoto =
+            photo =
                 `/uploads/candidates/${req.files.photo[0].filename}`;
+
         }
 
 
-        if (req.files?.symbolImage?.[0]) {
+        if (
+            req.files &&
+            req.files.symbolImage &&
+            req.files.symbolImage[0]
+        ) {
 
             symbolImage =
                 `/uploads/candidates/${req.files.symbolImage[0].filename}`;
+
         }
 
 
-        const candidate = new Candidate({
+        /* ================================
+           CREATE CANDIDATE
+        ================================= */
 
-            name: name.trim(),
+        const candidate =
+            new Candidate({
 
-            party: party.trim(),
+                election:
+                    election._id,
 
-            symbol: symbol.trim(),
+                name:
+                    name.trim(),
 
-            photo: candidatePhoto,
+                party:
+                    party.trim(),
 
-            symbolImage: symbolImage
+                symbol:
+                    symbol.trim(),
 
-        });
+                photo,
+
+                symbolImage
+
+            });
 
 
         await candidate.save();
@@ -96,14 +213,18 @@ const addCandidate = async (req, res) => {
 
         });
 
+
     } catch (error) {
 
         console.log(error);
 
+
         res.status(500).json({
             message: error.message
         });
+
     }
+
 };
 
 
@@ -115,23 +236,90 @@ const getCandidates = async (req, res) => {
 
     try {
 
+        const {
+            electionId
+        } = req.query;
+
+
+        if (!electionId) {
+
+            return res.status(400).json({
+                message:
+                    "Election ID is required"
+            });
+
+        }
+
+
+        /* ================================
+           CHECK ELECTION
+        ================================= */
+
+        const election =
+            await findElection(
+                electionId
+            );
+
+
+        if (!election) {
+
+            return res.status(404).json({
+                message:
+                    "Election not found"
+            });
+
+        }
+
+
+        /* ================================
+           GET ONLY THIS ELECTION'S
+           CANDIDATES
+        ================================= */
+
         const candidates =
-            await Candidate.find()
-                .sort({ createdAt: 1 });
+            await Candidate.find({
+
+                election:
+                    election._id
+
+            }).sort({
+
+                createdAt: 1
+
+            });
 
 
         res.status(200).json({
+
             candidates
+
         });
+
 
     } catch (error) {
 
         console.log(error);
 
+
+        if (
+            error.name ===
+            "CastError"
+        ) {
+
+            return res.status(400).json({
+                message:
+                    "Invalid election ID"
+            });
+
+        }
+
+
         res.status(500).json({
             message: error.message
         });
+
     }
+
 };
 
 
@@ -143,7 +331,10 @@ const updateCandidate = async (req, res) => {
 
     try {
 
-        const { id } = req.params;
+        const {
+            id
+        } = req.params;
+
 
         const {
             name,
@@ -154,6 +345,10 @@ const updateCandidate = async (req, res) => {
         } = req.body;
 
 
+        /* ================================
+           FIND CANDIDATE
+        ================================= */
+
         const candidate =
             await Candidate.findById(id);
 
@@ -161,76 +356,172 @@ const updateCandidate = async (req, res) => {
         if (!candidate) {
 
             return res.status(404).json({
-                message: "Candidate not found"
-            });
-        }
-
-
-        if (!name || !party || !symbol) {
-
-            return res.status(400).json({
                 message:
-                    "Candidate name, party and symbol are required"
+                    "Candidate not found"
             });
+
         }
 
 
-        /*
-         * Update basic candidate information
-         */
+        /* ================================
+           FIND ASSOCIATED ELECTION
+        ================================= */
 
-        candidate.name = name.trim();
+        const election =
+            await Election.findById(
+                candidate.election
+            );
 
-        candidate.party = party.trim();
 
-        candidate.symbol = symbol.trim();
+        if (!election) {
+
+            return res.status(404).json({
+                message:
+                    "Associated election not found"
+            });
+
+        }
 
 
-        /*
-         * Handle candidate photo
-         */
+        /* ================================
+           PREVENT EDIT AFTER ELECTION ENDS
+        ================================= */
 
-        if (req.files?.photo?.[0]) {
+        const now =
+            new Date();
 
-            // Delete previous photo
+
+        if (now >= election.endTime) {
+
+            return res.status(403).json({
+                message:
+                    "Candidates cannot be edited after the election ends"
+            });
+
+        }
+
+
+        /* ================================
+           UPDATE TEXT FIELDS
+        ================================= */
+
+        if (name !== undefined) {
+
+            candidate.name =
+                name.trim();
+
+        }
+
+
+        if (party !== undefined) {
+
+            candidate.party =
+                party.trim();
+
+        }
+
+
+        if (symbol !== undefined) {
+
+            candidate.symbol =
+                symbol.trim();
+
+        }
+
+
+        /* ================================
+           REMOVE CANDIDATE PHOTO
+        ================================= */
+
+        if (
+            removePhoto === "true" ||
+            removePhoto === true
+        ) {
+
             if (candidate.photo) {
-                deleteFile(candidate.photo);
+
+                deleteUploadedFile(
+                    candidate.photo
+                );
+
             }
+
+            candidate.photo =
+                null;
+
+        }
+
+
+        /* ================================
+           REMOVE SYMBOL IMAGE
+        ================================= */
+
+        if (
+            removeSymbolImage === "true" ||
+            removeSymbolImage === true
+        ) {
+
+            if (candidate.symbolImage) {
+
+                deleteUploadedFile(
+                    candidate.symbolImage
+                );
+
+            }
+
+            candidate.symbolImage =
+                null;
+
+        }
+
+
+        /* ================================
+           NEW PHOTO
+        ================================= */
+
+        if (
+            req.files &&
+            req.files.photo &&
+            req.files.photo[0]
+        ) {
+
+            if (candidate.photo) {
+
+                deleteUploadedFile(
+                    candidate.photo
+                );
+
+            }
+
 
             candidate.photo =
                 `/uploads/candidates/${req.files.photo[0].filename}`;
 
-        } else if (removePhoto === "true") {
-
-            if (candidate.photo) {
-                deleteFile(candidate.photo);
-            }
-
-            candidate.photo = null;
         }
 
 
-        /*
-         * Handle symbol image
-         */
+        /* ================================
+           NEW SYMBOL IMAGE
+        ================================= */
 
-        if (req.files?.symbolImage?.[0]) {
+        if (
+            req.files &&
+            req.files.symbolImage &&
+            req.files.symbolImage[0]
+        ) {
 
-            // Delete previous symbol image
             if (candidate.symbolImage) {
-                deleteFile(candidate.symbolImage);
+
+                deleteUploadedFile(
+                    candidate.symbolImage
+                );
+
             }
+
 
             candidate.symbolImage =
                 `/uploads/candidates/${req.files.symbolImage[0].filename}`;
 
-        } else if (removeSymbolImage === "true") {
-
-            if (candidate.symbolImage) {
-                deleteFile(candidate.symbolImage);
-            }
-
-            candidate.symbolImage = null;
         }
 
 
@@ -246,16 +537,37 @@ const updateCandidate = async (req, res) => {
 
         });
 
+
     } catch (error) {
 
         console.log(error);
 
+
+        if (
+            error.name ===
+            "CastError"
+        ) {
+
+            return res.status(400).json({
+                message:
+                    "Invalid candidate ID"
+            });
+
+        }
+
+
         res.status(500).json({
             message: error.message
         });
+
     }
+
 };
 
+
+/* =========================================
+   EXPORT
+========================================= */
 
 module.exports = {
 
