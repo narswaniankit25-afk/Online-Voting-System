@@ -941,9 +941,7 @@ function VoterDashboard() {
         }
 
 
-        navigate(
-            `/results/${selectedElectionId}`
-        );
+       navigate(`/results/${selectedElectionId}`);
 
     };
 /* =========================================

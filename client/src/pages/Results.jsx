@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+    useNavigate,
+    useParams
+} from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import api from "../api/api";
 import "./Results.css";
@@ -8,6 +11,8 @@ import "./Results.css";
 function Results() {
 
     const navigate = useNavigate();
+
+    const { electionId } = useParams();
 
     const [results, setResults] = useState([]);
     const [message, setMessage] = useState("");
@@ -79,9 +84,18 @@ function Results() {
 
     useEffect(() => {
 
+        if (!electionId) {
+
+            setMessage(
+                "Election ID is missing"
+            );
+
+            return;
+        }
+
         getResults();
 
-    }, []);
+    }, [electionId]);
 
 
     const getResults = async () => {
@@ -89,7 +103,9 @@ function Results() {
         try {
 
             const response =
-                await api.get("/results");
+                await api.get(
+                    `/results/${electionId}`
+                );
 
             setResults(
                 response.data.results || []

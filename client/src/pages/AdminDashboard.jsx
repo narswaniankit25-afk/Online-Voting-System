@@ -1443,9 +1443,7 @@ const handleCreateElection = async (e) => {
                                     selectedElectionId
                                 ) {
 
-                                    navigate(
-                                        `/results/${selectedElectionId}`
-                                    );
+                                  navigate(`/results/${selectedElectionId}`);
 
                                 } else {
 
@@ -2079,21 +2077,36 @@ const handleCreateElection = async (e) => {
                                 </label>
 
                                 <select
-                                    value={
-                                        selectedElectionId
-                                    }
-                                    onChange={
-                                        handleElectionChange
-                                    }
-                                    style={{
-                                        width: "100%",
-                                        padding: "12px 14px",
-                                        borderRadius: "10px",
-                                        border: "1px solid #d9d9d9",
-                                        background: "inherit",
-                                        fontSize: "15px"
-                                    }}
-                                >
+    value={selectedElectionId}
+    onChange={handleElectionChange}
+    style={{
+        width: "100%",
+        padding: "12px 14px",
+        borderRadius: "10px",
+        border: darkMode
+            ? "1px solid #374151"
+            : "1px solid #d9d9d9",
+
+        background: darkMode
+            ? "#111827"
+            : "#ffffff",
+
+        color: darkMode
+            ? "#f9fafb"
+            : "#1f2937",
+
+        fontSize: "15px",
+        fontWeight: "600",
+
+        colorScheme: darkMode
+            ? "dark"
+            : "light",
+
+        WebkitTextFillColor: darkMode
+            ? "#f9fafb"
+            : "#1f2937"
+    }}
+>
 
                                     {elections.map(
                                         (item) => (

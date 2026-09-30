@@ -1632,6 +1632,7 @@ body.dark-mode .admin-election-details strong {
     color: #e5e7eb;
 }
 
+
 body.dark-mode .admin-form-intro {
     border-color: #222d3d;
 }
@@ -1955,5 +1956,572 @@ body.dark-mode .admin-footer {
         flex-direction: column;
 
         gap: 8px;
+    }
+}
+/* =========================================================
+   PROFESSIONAL eVOTE ADMIN UI
+   Typography + Election Selector + Dark Mode
+========================================================= */
+
+
+/* =========================================================
+   GLOBAL ADMIN TYPOGRAPHY
+========================================================= */
+
+.admin-page {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.admin-navbar-inner {
+    min-height: 76px;
+}
+
+.admin-brand strong {
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.admin-brand span {
+    font-size: 11px;
+}
+
+.admin-nav-button {
+    padding: 10px 14px;
+    font-size: 13px;
+}
+
+.admin-logout {
+    padding: 10px 15px;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.admin-hero h1 {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.9px;
+}
+
+.admin-hero p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
+.admin-section-header h2 {
+    font-size: 23px;
+    font-weight: 750;
+}
+
+.admin-section-header p {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.admin-stat-card span {
+    font-size: 12px;
+}
+
+.admin-stat-card strong {
+    font-size: 17px;
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   ELECTION CARD
+========================================================= */
+
+.admin-small-label {
+    font-size: 11px;
+}
+
+.admin-election-top h3 {
+    font-size: 18px;
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   ELECTION SELECT CONTAINER
+========================================================= */
+
+.admin-election-control {
+    width: 100%;
+}
+
+
+/* =========================================================
+   ELECTION SELECT - LIGHT MODE
+========================================================= */
+/* =========================================================
+   eVOTE — ELECTION SELECTOR
+   FINAL DARK MODE FIX
+========================================================= */
+
+.admin-election-control {
+    width: 100%;
+    margin-top: 14px;
+}
+
+.admin-election-select {
+    width: 100%;
+    min-height: 52px;
+
+    box-sizing: border-box;
+
+    padding: 0 46px 0 16px;
+
+    border: 1px solid #d8dee8;
+    border-radius: 11px;
+
+    outline: none;
+
+    background-color: #ffffff;
+    color: #1f2937;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 52px;
+
+    cursor: pointer;
+
+    appearance: auto;
+    -webkit-appearance: menulist;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.admin-election-select:hover {
+    border-color: #635bff;
+}
+
+.admin-election-select:focus {
+    border-color: #635bff;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 91, 255, 0.12);
+}
+
+/* =========================================================
+   LIGHT MODE OPTIONS
+========================================================= */
+
+.admin-election-select option {
+    background: #ffffff;
+    color: #1f2937;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   DARK MODE — SELECT
+========================================================= */
+
+body.dark-mode .admin-election-select {
+    background: #111827 !important;
+
+    border: 1px solid #374151 !important;
+
+    color: #f9fafb !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    color-scheme: dark;
+
+    -webkit-text-fill-color: #f9fafb !important;
+}
+
+body.dark-mode .admin-election-select:hover {
+    background: #151e2f !important;
+
+    border-color: #635bff !important;
+
+    color: #ffffff !important;
+
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode .admin-election-select:focus {
+    background: #111827 !important;
+
+    border-color: #817bff !important;
+
+    color: #ffffff !important;
+
+    -webkit-text-fill-color: #ffffff !important;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 91, 255, 0.18);
+}
+
+
+/* =========================================================
+   DARK MODE — OPTIONS
+========================================================= */
+
+body.dark-mode .admin-election-select option {
+    background-color: #111827 !important;
+
+    color: #f9fafb !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+body.dark-mode .admin-election-select option:checked {
+    background-color: #27234f !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   DARK MODE — SELECTED TEXT
+   Extra Chromium compatibility
+========================================================= */
+
+body.dark-mode select.admin-election-select {
+    color: #f9fafb !important;
+
+    background-color: #111827 !important;
+
+    -webkit-text-fill-color: #f9fafb !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+
+    .admin-election-select {
+        min-height: 48px;
+
+        font-size: 13px;
+        line-height: 48px;
+    }
+
+    body.dark-mode .admin-election-select {
+        font-size: 13px !important;
+
+        color: #f9fafb !important;
+
+        -webkit-text-fill-color: #f9fafb !important;
+    }
+
+    body.dark-mode .admin-election-select option {
+        font-size: 13px !important;
+    }
+}
+
+/* =========================================================
+   FORM TYPOGRAPHY
+========================================================= */
+
+.admin-field label {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.admin-field input {
+    min-height: 46px;
+
+    padding: 11px 13px;
+
+    font-size: 14px;
+}
+
+.admin-primary-button,
+.admin-secondary-button,
+.admin-announce-button {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FORM INTRO
+========================================================= */
+
+.admin-form-intro strong {
+    font-size: 14px;
+}
+
+.admin-form-intro span {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   UPLOAD AREA
+========================================================= */
+
+.admin-upload-heading strong {
+    font-size: 13px;
+}
+
+.admin-file-label span {
+    font-size: 12px;
+}
+
+.admin-file-label small {
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.admin-search input {
+    font-size: 13px;
+}
+
+.admin-count {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   CANDIDATE LIST
+========================================================= */
+
+.admin-candidate-info h3 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-candidate-info p {
+    font-size: 12px;
+}
+
+.admin-edit-button {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.admin-empty h3 {
+    font-size: 16px;
+}
+
+.admin-empty p {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.admin-footer strong {
+    font-size: 14px;
+}
+
+.admin-footer span,
+.admin-footer p {
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   DARK MODE - TEXT CONTRAST
+========================================================= */
+
+body.dark-mode .admin-small-label {
+    color: #9aa6ba;
+}
+
+body.dark-mode .admin-election-details span {
+    color: #9aa6ba;
+}
+
+body.dark-mode .admin-field label {
+    color: #c4ccda;
+}
+
+body.dark-mode .admin-search input {
+    color: #f3f4f6;
+}
+
+body.dark-mode .admin-candidate-info p {
+    color: #9aa6ba;
+}
+
+
+/* =========================================================
+   DARK MODE - SELECTED ELECTION CARD
+========================================================= */
+
+body.dark-mode .admin-election-card {
+    background: #111827;
+    border-color: #253047;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-mode .admin-election-card:hover {
+    border-color: #303c59;
+}
+
+
+/* =========================================================
+   DARK MODE - ELECTION DETAILS
+========================================================= */
+
+body.dark-mode .admin-election-details {
+    border-top-color: #253047;
+}
+
+body.dark-mode .admin-election-details strong {
+    color: #f3f4f6;
+}
+
+
+/* =========================================================
+   DARK MODE - STATUS BADGES
+========================================================= */
+
+body.dark-mode .admin-status-live {
+    background: rgba(16, 185, 129, 0.14);
+    color: #6ee7b7;
+}
+
+body.dark-mode .admin-status-upcoming {
+    background: rgba(245, 158, 11, 0.14);
+    color: #fbbf24;
+}
+
+body.dark-mode .admin-status-ended {
+    background: rgba(100, 116, 139, 0.18);
+    color: #cbd5e1;
+}
+
+
+/* =========================================================
+   DARK MODE - BUTTONS
+========================================================= */
+
+body.dark-mode .admin-secondary-button {
+    background: #111827;
+
+    border-color: #374151;
+
+    color: #d1d5db;
+}
+
+body.dark-mode .admin-secondary-button:hover {
+    background: #1a2333;
+
+    border-color: #4b5563;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DARK MODE - INPUTS
+========================================================= */
+
+body.dark-mode .admin-field input {
+    background: #0f172a;
+
+    border-color: #2f3a4d;
+
+    color: #f3f4f6;
+
+    font-size: 14px;
+}
+
+body.dark-mode .admin-field input::placeholder {
+    color: #667085;
+}
+
+body.dark-mode .admin-field input:focus {
+    background: #111827;
+
+    border-color: #635bff;
+
+    box-shadow:
+        0 0 0 4px rgba(99, 91, 255, 0.10);
+}
+
+
+/* =========================================================
+   DARK MODE - SEARCH
+========================================================= */
+
+body.dark-mode .admin-search {
+    background: #111827;
+
+    border-color: #2f3a4d;
+}
+
+body.dark-mode .admin-search:focus-within {
+    border-color: #635bff;
+}
+
+body.dark-mode .admin-search input {
+    background: transparent;
+
+    color: #f3f4f6;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+
+    .admin-election-select {
+        min-height: 48px;
+
+        font-size: 13px;
+    }
+
+    .admin-election-select option {
+        font-size: 13px;
+    }
+
+    .admin-hero h1 {
+        font-size: 28px;
+    }
+
+    .admin-section-header h2 {
+        font-size: 20px;
     }
 }

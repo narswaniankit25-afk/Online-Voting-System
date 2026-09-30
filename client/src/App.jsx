@@ -83,14 +83,32 @@ function App() {
                 {/* =========================================
                     RESULTS
                     Logged-in users only
+                    Election-specific results
+                ========================================= */}
+
+                <Route
+                    path="/results/:electionId"
+                    element={
+                        <ProtectedRoute>
+                            <Results />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* =========================================
+                    OLD /results URL
+                    Redirect to dashboard because an
+                    election ID is required for results
                 ========================================= */}
 
                 <Route
                     path="/results"
                     element={
-                        <ProtectedRoute>
-                            <Results />
-                        </ProtectedRoute>
+                        <Navigate
+                            to="/dashboard"
+                            replace
+                        />
                     }
                 />
 
