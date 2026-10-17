@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import api from "../api/api";
 import "./VoterDashboard.css";
-
+import AIChat from "../components/AIChat";
 
 function VoterDashboard() {
 
@@ -2739,7 +2739,10 @@ const handleReturnToAdminDashboard = () => {
                 </div>
 
             )}
-
+<AIChat
+    electionId={selectedElectionId}
+    electionTitle={election?.title}
+/>
         </div>
 
     );
